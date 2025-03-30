@@ -1,0 +1,7 @@
+# Required Python Packages for Autonomous Drone Navigation
+
+numpy==1.23.5          # Numerical computations and array operations  
+shapely==2.0.1         # Geometry operations for obstacle representation  
+plotly==5.18.0         # 3D visualization of the drone’s navigation  
+collections-extended   # Extended collections for deque (experience replay)  
+ipython==8.15.0        # Interactive display for dynamic visualization  
