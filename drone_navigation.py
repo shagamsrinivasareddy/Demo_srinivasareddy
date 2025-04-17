@@ -98,3 +98,55 @@ for episode in range(TRAIN_EPISODES):
             break
         state_index = next_state_index
     print(f"Episode {episode + 1}: Reward = {total_reward}, Epsilon = {agent.epsilon:.2f}")
+# Dynamic Visualization using Plotly
+def animate_drone_movement(env):
+    obstacles = np.array([[obs.x, obs.y, obs.z] for obs in env.obstacles])
+
+    fig = go.Figure()
+
+    # Add obstacles
+    fig.add_trace(go.Scatter3d(
+        x=obstacles[:, 0], y=obstacles[:, 1], z=obstacles[:, 2],
+        mode='markers', marker=dict(size=5, color='red'), name='Obstacles'))
+
+    # Add goal
+    fig.add_trace(go.Scatter3d(
+        x=[env.goal[0]], y=[env.goal[1]], z=[env.goal[2]],
+        mode='markers', marker=dict(size=8, color='green'), name='Goal'))
+
+    # Initialize path trace
+    path_trace = go.Scatter3d(
+        x=[], y=[], z=[], mode='lines+markers',
+        marker=dict(size=5, color='blue'), name='Drone Path')
+
+    fig.add_trace(path_trace)
+
+    fig.update_layout(
+        scene=dict(
+            xaxis=dict(range=[0, 10]),
+            yaxis=dict(range=[0, 10]),
+            zaxis=dict(range=[0, 10])
+        ),
+        title="Drone Navigation Simulation"
+    )
+
+    # Display figure in Google Colab
+    display(fig)
+
+    # Animate by updating the path dynamically
+    for i in range(len(env.path)):
+        path = np.array(env.path[:i+1])
+
+        if len(path) > 0:
+            print(f"Step {i+1}, Drone Position: {path[-1]}")
+
+            fig.data[2].x = path[:, 0]
+            fig.data[2].y = path[:, 1]
+            fig.data[2].z = path[:, 2]
+
+            clear_output(wait=True)
+            fig.show()
+            time.sleep(0.3)  # Control animation speed
+
+# Run updated animation
+animate_drone_movement(env)
